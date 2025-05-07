@@ -1,36 +1,59 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+
+import io.restassured.response.ValidatableResponse;
 import models.ListResourceModel;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static helpers.CustomAllureListener.withCustomTemplates;
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Epic("API Тесты")
+@DisplayName("Тесты для списка ресурсов")
+
 public class ListResourceTests extends TestBase {
+
     @Test
+    @Description("Тест проверяет  ответ 200 Ок при запросе списка ресурсов")
     void checkListWithStatusTest() {
-        given()
-                .log().uri()
-                .get("/unknown")
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(200);
+        ValidatableResponse response = step("Отправка запроса", () ->
+                given()
+                        .filter(withCustomTemplates())
+                        .log().uri()
+                        .get("/unknown")
+                        .then()
+        );
+        step("Проверка ответа", () -> {
+            response
+                    .log().all()
+                    .statusCode(200);
+        });
     }
 
+
     @Test
+    @Description("Тест проверяет корректность ответа параметра total при запросе списка ресурсов")
     void checkTotalWithLogsTest() {
+        ListResourceModel authData = new ListResourceModel();
 
-        ListResourceModel response = given()
-                .log().all()
-                .get("/unknown")
+        ListResourceModel response = step("Отправка запроса", () ->
+                given()
+                        .filter(withCustomTemplates())
+                        .log().all()
+                        .get("/unknown")
 
-        .then()
-                .log().all()
-                // .body("total", is(12));
-                .extract().as(ListResourceModel.class);
+                        .then()
+                        .log().all()
+                        .extract().as(ListResourceModel.class));
 
-        assertEquals(12, response.getTotal());
+        step("Проверка ответа", () ->
+                assertEquals(12, response.getTotal()));
     }
 }
+
