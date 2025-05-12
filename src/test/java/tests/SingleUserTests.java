@@ -2,74 +2,71 @@ package tests;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
+import io.restassured.response.ValidatableResponse;
 import models.SingleUserModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static specs.SingleUserSpec.*;
 
 @Epic("API Тесты")
 @DisplayName("Тесты для позитивного запроса получения данных по пользователю")
 
 public class SingleUserTests extends TestBase {
 
-
     @Test
     @Description("Тест проверяет ответ метода /users/2 со всеми логами ")
     void checkIdUserWithLogsTest() {
-        SingleUserModel response = step("Отправка запроса", () ->
-                given()
-                        .filter(withCustomTemplates())
-                        .log().all()
+        ValidatableResponse response = step("Отправка запроса", () ->
+                given(checkIdRequestSpec)
                         .get("/users/2")
                         .then()
-                        .log().all()
-                        .extract()
-                        .as(SingleUserModel.class));
+                        .spec(checkIdResponseSpec)
+                );
 
-        step("Получение ответа", () ->
-                assertThat(response.getData().getId()).isEqualTo(2));
+        step("Получение ответа", () -> {
+        int actualId = response.extract().path("data.id");
+        assertEquals(2, actualId);
+        });
     }
 
     @Test
     @Description("Тест проверяет ответ метода /users/2 с логированием body")
     void checkIdUserWithSomeLogsTest() {
         SingleUserModel authData = new SingleUserModel();
-        SingleUserModel response = step("Отправка запроса", () ->
-        given()
-                .filter(withCustomTemplates())
-                .log().all()
+        ValidatableResponse response = step("Отправка запроса", () ->
+        given(checkIdRequestSpec)
+
                 .get("/users/2")
                 .then()
-                .log().body()
-                .extract()
-                .as(SingleUserModel.class));
+                .spec(checkBodyResponseSpec)
+        );
 
-        step("Получение ответа", () ->
-        assertThat(response.getData().getId()).isEqualTo(2));
+        step("Получение ответа", () -> {
+            int actualId = response.extract().path("data.id");
+            assertEquals(2, actualId);
+        });
     }
 
     @Test
     @Description("Тест проверяет статус 200 Ок метода /users/2")
     void checkIdUserWithStatusTest() {
         SingleUserModel authData = new SingleUserModel();
-        SingleUserModel response = step("Отправка запроса", () ->
-        given()
-                .filter(withCustomTemplates())
-                .log().uri()
+        ValidatableResponse response = step("Отправка запроса", () ->
+        given(checkIdRequestSpec)
+
                 .get("/users/2")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .extract()
-                .as(SingleUserModel.class));
+                .spec(checkBodyResponseSpec)
+        );
 
-        step("Получение ответа", () ->
-        assertThat(response.getData().getId()).isEqualTo(2));
+        step("Получение ответа", () -> {
+            int actualId = response.extract().path("data.id");
+            assertEquals(2, actualId);
+        });
     }
 
 }

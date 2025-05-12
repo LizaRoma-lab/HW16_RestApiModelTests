@@ -6,9 +6,9 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
+import static specs.SingleUserSpec.*;
 
 @Epic("API Тесты")
 @DisplayName("Тесты для негативного запроса получения данных по пользователю")
@@ -20,17 +20,15 @@ public class UserNotFoundTest extends TestBase {
     @Description("Тест проверяет ответ 401 при запросе пользователя с невалидным id")
     void checkStatusTest() {
         ValidatableResponse response = step("Отправка запроса", () ->
-                given()
-                        .filter(withCustomTemplates())
-                        .log().all()
+                given(checkIdRequestSpec)
                         .get("/users/23")
                         .then()
         );
 
         step("Проверка ответа", () -> {
             response
-                    .log().all()
-                    .statusCode(401);
+                    .spec(ErrorResponseSpec);
+
         });
     }
 }
