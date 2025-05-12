@@ -10,6 +10,6 @@ public class TestBase {
         RestAssured.baseURI = "https://reqres.in";
         RestAssured.basePath = "/api";
         RestAssured.config = RestAssured.config()
-                .sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation()); // Игнорируем SSL
+                .sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation());
     }
 }
