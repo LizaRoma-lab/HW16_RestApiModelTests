@@ -3,7 +3,6 @@ package specs;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import models.SingleUserModel;
 
 import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.restassured.RestAssured.with;
@@ -17,22 +16,17 @@ public class SingleUserSpec {
             .header("x-api-key", "reqres-free-v1")
             .contentType(JSON);
 
-    public static ResponseSpecification checkIdResponseSpec = new ResponseSpecBuilder()
-            .expectStatusCode(200)
-            .log(STATUS)
-            .log(ALL)
-            .build();
+    public static ResponseSpecification getResponseSpec (int statusCode) {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(statusCode)
+                .log(STATUS)
+                .log(BODY)
+                .build();
+    }
 
-    public static ResponseSpecification checkBodyResponseSpec = new ResponseSpecBuilder()
-            .expectStatusCode(200)
-            .log(STATUS)
-            .log(BODY)
-            .build();
+    public static ResponseSpecification checkIdResponseSpec = getResponseSpec(200);
+    public static ResponseSpecification checkBodyResponseSpec = getResponseSpec(200);
+    public static ResponseSpecification ErrorResponseSpec = getResponseSpec(404);
 
-    public static ResponseSpecification ErrorResponseSpec = new ResponseSpecBuilder()
-            .expectStatusCode(404)
-            .log(STATUS)
-            .log(BODY)
-            .build();
 
 }

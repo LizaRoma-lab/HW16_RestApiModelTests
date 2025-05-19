@@ -3,7 +3,6 @@ package tests;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.restassured.response.ValidatableResponse;
-import models.SingleUserModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +35,6 @@ public class SingleUserTests extends TestBase {
     @Test
     @Description("Тест проверяет ответ метода /users/2 с логированием body")
     void checkIdUserWithSomeLogsTest() {
-        SingleUserModel authData = new SingleUserModel();
         ValidatableResponse response = step("Отправка запроса", () ->
         given(checkIdRequestSpec)
 
@@ -54,7 +52,6 @@ public class SingleUserTests extends TestBase {
     @Test
     @Description("Тест проверяет статус 200 Ок метода /users/2")
     void checkIdUserWithStatusTest() {
-        SingleUserModel authData = new SingleUserModel();
         ValidatableResponse response = step("Отправка запроса", () ->
         given(checkIdRequestSpec)
 
