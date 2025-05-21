@@ -27,7 +27,7 @@ public class UserNotFoundTest extends TestBase {
 
         step("Проверка ответа", () -> {
             response
-                    .spec(ErrorResponseSpec);
+                    .spec(errorResponseSpec);
 
         });
     }

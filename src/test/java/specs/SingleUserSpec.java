@@ -26,7 +26,7 @@ public class SingleUserSpec {
 
     public static ResponseSpecification checkIdResponseSpec = getResponseSpec(200);
     public static ResponseSpecification checkBodyResponseSpec = getResponseSpec(200);
-    public static ResponseSpecification ErrorResponseSpec = getResponseSpec(404);
+    public static ResponseSpecification errorResponseSpec = getResponseSpec(404);
 
 
 }
